@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stile.css">
+    <title>Visualización de Geolocalización</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Visualización con Google Maps</h1>
+
+    <h2>Ingrese las coordenadas</h2>
+    <form id="coordenadasForm">
+        <label for="lat">Latitud</label>
+        <input type="number" id="lat" step="any" placeholder="Latitud" required>
+        
+        <label for="lon">Longitud</label>
+        <input type="number" id="lon" step="any" placeholder="Longitud" required>
+
+        <button type="submit">Ver en el mapa</button>
+    </form>
+
+    <div id="map"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkRjg21Io7YcrKsnBV6tz-MKbljHZZd-Q&callback=initMap"></script>
+    
+    <script>
+        function initMap() {
+            // Configuración inicial del mapa
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 0, lng: 0 }, // Coordenadas iniciales
+                zoom: 2
+            });
+
+            // Escuchar el envío del formulario
+            document.getElementById("coordenadasForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                // Obtener las coordenadas del formulario
+                const lat = parseFloat(document.getElementById("lat").value);
+                const lon = parseFloat(document.getElementById("lon").value);
+
+                if (!isNaN(lat) && !isNaN(lon)) {
+                    const position = { lat: lat, lng: lon };
+
+                    // Centrar el mapa y agregar marcador
+                    map.setCenter(position);
+                    map.setZoom(15);
+                    new google.maps.Marker({
+                        position: position,
+                        map: map
+                    });
+                } else {
+                    alert("Por favor, ingrese coordenadas válidas.");
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // Iniciar el mapa cuando se cargue la página
+        window.onload = initMap;
+    </script>
+
+</body>
+</html>
